@@ -98,7 +98,6 @@ dependencies {
 
     // Glance (home screen widget, built with Compose-like API)
     implementation("androidx.glance:glance-appwidget:1.1.0")
-    implementation("androidx.glance:glance-material3:1.1.0")
 
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
