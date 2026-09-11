@@ -59,7 +59,7 @@ class ReminderWorker(
                 NotificationHelper.NOTIFICATION_ID_WEEKLY,
                 "Weekly spend goal not reached yet",
                 "You've spent ${CurrencyUtils.formatRands(spent)} of ${CurrencyUtils.formatRands(goal)} this week — " +
-                    "${CurrencyUtils.formatRands(remaining)} to go before Sunday."
+                    "${CurrencyUtils.formatRands(remaining)} to go before Friday."
             )
         }
     }

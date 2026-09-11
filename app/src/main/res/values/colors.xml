@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="brand_primary">#00643C</color>
-    <color name="brand_primary_dark">#004226</color>
-    <color name="brand_secondary">#7ED957</color>
+    <color name="brand_primary">#D81B84</color>
+    <color name="brand_primary_dark">#A01759</color>
+    <color name="brand_secondary">#FF7CB5</color>
     <color name="warning">#E5A400</color>
     <color name="danger">#C43D3D</color>
     <color name="surface_light">#F5F7F5</color>

@@ -9,7 +9,7 @@ only on your phone — no account, no server, nothing sent anywhere.
 - **Add a spend** manually (amount, category, date, optional note). Categories are
   **Healthy Food**, **Healthy Care**, and **Other**.
 - **Dashboard** shows, live:
-  - This week's total spend vs. your **R4,500** weekly goal (week = Monday–Sunday)
+  - This week's total spend vs. your **R4,500** weekly goal (week = Saturday–Friday)
   - This month's total spend vs. your **R29,000** monthly goal (calendar month)
   - This month's Healthy Food total and Healthy Care total (no goal by default — just a
     running total, since you didn't give target numbers for those two; you can set
@@ -27,9 +27,9 @@ only on your phone — no account, no server, nothing sent anywhere.
 
 ## Assumptions I made (all easy to change)
 
-- **Week = Monday to Sunday.** The weekly goal and the Friday reminder are based on
+- **Week = Saturday to Friday.** The weekly goal and the Friday reminder are based on
   this. If you'd rather it ran Sunday–Saturday, that's a one-line change in
-  `util/DateUtils.kt` (`DayOfWeek.MONDAY` → `DayOfWeek.SUNDAY`).
+  `util/DateUtils.kt` (`DayOfWeek.SATURDAY` → `DayOfWeek.FRIDAY`).
 - **Reminder time defaults to 18:00 (6pm)**, editable in Settings.
 - **Healthy Food / Healthy Care have no spend goal by default** — the app just tracks
   and displays your monthly total for each, since no target number was given for them.

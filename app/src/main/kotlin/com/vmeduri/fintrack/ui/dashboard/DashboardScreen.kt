@@ -45,7 +45,7 @@ fun DashboardScreen(onAddClick: () -> Unit) {
                 title = "This week",
                 spentCents = uiState.weekSpentCents,
                 goalCents = uiState.weekGoalCents,
-                subtitle = "Monday to Sunday"
+                subtitle = "Saturday to Friday"
             )
             ProgressCard(
                 title = "This month",
