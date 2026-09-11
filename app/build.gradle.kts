@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -98,6 +99,16 @@ dependencies {
 
     // Glance (home screen widget, built with Compose-like API)
     implementation("androidx.glance:glance-appwidget:1.1.0")
+
+    // Firebase
+    val firebaseBom = platform("com.google.firebase:firebase-bom:33.1.0")
+    implementation(firebaseBom)
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation("com.google.firebase:firebase-crashlytics-ktx")
+
+    // Coroutines for Firebase async operations
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.0")
 
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")

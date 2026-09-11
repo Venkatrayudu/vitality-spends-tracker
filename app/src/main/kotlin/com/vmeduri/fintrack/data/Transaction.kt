@@ -18,5 +18,17 @@ data class Transaction(
     val date: LocalDate,
     val category: Category,
     val note: String? = null,
-    val createdAt: Long = System.currentTimeMillis()
-)
+    val createdAt: Long = System.currentTimeMillis(),
+    
+    // Cloud sync fields
+    val userId: String = "",
+    val cloudId: String? = null,
+    val syncStatus: SyncStatus = SyncStatus.PENDING,
+    val syncTimestamp: Long = 0L
+) {
+    enum class SyncStatus {
+        PENDING,
+        SYNCED,
+        ERROR
+    }
+}

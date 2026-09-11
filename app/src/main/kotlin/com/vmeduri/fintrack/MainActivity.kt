@@ -25,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
@@ -33,13 +34,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.vmeduri.fintrack.auth.AuthService
 import com.vmeduri.fintrack.ui.addedit.AddEditTransactionScreen
+import com.vmeduri.fintrack.ui.auth.LoginScreen
 import com.vmeduri.fintrack.ui.dashboard.DashboardScreen
 import com.vmeduri.fintrack.ui.history.HistoryScreen
 import com.vmeduri.fintrack.ui.settings.SettingsScreen
 import com.vmeduri.fintrack.ui.theme.SpendTrackerTheme
 
 private object Routes {
+    const val LOGIN = "login"
     const val DASHBOARD = "dashboard"
     const val HISTORY = "history"
     const val SETTINGS = "settings"
@@ -50,6 +54,8 @@ private object Routes {
 }
 
 class MainActivity : ComponentActivity() {
+
+    private val authService = AuthService()
 
     private val requestNotificationPermission =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { /* no-op either way */ }
@@ -67,7 +73,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             SpendTrackerTheme {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    AppRoot()
+                    AppRoot(authService)
                 }
             }
         }
@@ -75,71 +81,90 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-private fun AppRoot() {
+private fun AppRoot(authService: AuthService) {
+    val currentUser by authService.currentUser.collectAsStateWithLifecycle(null)
     val navController = rememberNavController()
 
-    Scaffold(
-        bottomBar = {
-            val backStackEntry by navController.currentBackStackEntryAsState()
-            val currentRoute = backStackEntry?.destination?.route
-            if (currentRoute == Routes.DASHBOARD || currentRoute == Routes.HISTORY || currentRoute == Routes.SETTINGS) {
-                NavigationBar {
-                    NavigationBarItem(
-                        selected = currentRoute == Routes.DASHBOARD,
-                        onClick = { navController.navigateSingleTopTo(Routes.DASHBOARD) },
-                        icon = { Icon(Icons.Filled.Home, contentDescription = null) },
-                        label = { Text(stringResource(R.string.nav_dashboard)) }
-                    )
-                    NavigationBarItem(
-                        selected = currentRoute == Routes.HISTORY,
-                        onClick = { navController.navigateSingleTopTo(Routes.HISTORY) },
-                        icon = { Icon(Icons.Filled.History, contentDescription = null) },
-                        label = { Text(stringResource(R.string.nav_history)) }
-                    )
-                    NavigationBarItem(
-                        selected = currentRoute == Routes.SETTINGS,
-                        onClick = { navController.navigateSingleTopTo(Routes.SETTINGS) },
-                        icon = { Icon(Icons.Filled.Settings, contentDescription = null) },
-                        label = { Text(stringResource(R.string.nav_settings)) }
-                    )
+    if (currentUser == null) {
+        LoginScreen(
+            authService = authService,
+            onLoginSuccess = {
+                navController.navigate(Routes.DASHBOARD) {
+                    popUpTo(Routes.LOGIN) { inclusive = true }
                 }
             }
-        }
-    ) { padding ->
-        NavHost(
-            navController = navController,
-            startDestination = Routes.DASHBOARD,
-            modifier = Modifier.padding(padding)
-        ) {
-            composable(Routes.DASHBOARD) {
-                DashboardScreen(onAddClick = { navController.navigate(Routes.ADD_EDIT_NEW) })
+        )
+    } else {
+        Scaffold(
+            bottomBar = {
+                val backStackEntry by navController.currentBackStackEntryAsState()
+                val currentRoute = backStackEntry?.destination?.route
+                if (currentRoute == Routes.DASHBOARD || currentRoute == Routes.HISTORY || currentRoute == Routes.SETTINGS) {
+                    NavigationBar {
+                        NavigationBarItem(
+                            selected = currentRoute == Routes.DASHBOARD,
+                            onClick = { navController.navigateSingleTopTo(Routes.DASHBOARD) },
+                            icon = { Icon(Icons.Filled.Home, contentDescription = null) },
+                            label = { Text(stringResource(R.string.nav_dashboard)) }
+                        )
+                        NavigationBarItem(
+                            selected = currentRoute == Routes.HISTORY,
+                            onClick = { navController.navigateSingleTopTo(Routes.HISTORY) },
+                            icon = { Icon(Icons.Filled.History, contentDescription = null) },
+                            label = { Text(stringResource(R.string.nav_history)) }
+                        )
+                        NavigationBarItem(
+                            selected = currentRoute == Routes.SETTINGS,
+                            onClick = { navController.navigateSingleTopTo(Routes.SETTINGS) },
+                            icon = { Icon(Icons.Filled.Settings, contentDescription = null) },
+                            label = { Text(stringResource(R.string.nav_settings)) }
+                        )
+                    }
+                }
             }
-            composable(Routes.HISTORY) {
-                HistoryScreen(
-                    onTransactionClick = { id -> navController.navigate(Routes.editExisting(id)) },
-                    onAddClick = { navController.navigate(Routes.ADD_EDIT_NEW) }
-                )
-            }
-            composable(Routes.SETTINGS) {
-                SettingsScreen()
-            }
-            composable(Routes.ADD_EDIT_NEW) {
-                AddEditTransactionScreen(
-                    transactionId = null,
-                    onDone = { navController.popBackStack() },
-                    onCancel = { navController.popBackStack() }
-                )
-            }
-            composable(
-                route = Routes.ADD_EDIT_WITH_ID,
-                arguments = listOf(navArgument("transactionId") { type = NavType.LongType })
-            ) { backStackEntry ->
-                val id = backStackEntry.arguments?.getLong("transactionId")
-                AddEditTransactionScreen(
-                    transactionId = id,
-                    onDone = { navController.popBackStack() },
-                    onCancel = { navController.popBackStack() }
-                )
+        ) { padding ->
+            NavHost(
+                navController = navController,
+                startDestination = Routes.DASHBOARD,
+                modifier = Modifier.padding(padding)
+            ) {
+                composable(Routes.DASHBOARD) {
+                    DashboardScreen(onAddClick = { navController.navigate(Routes.ADD_EDIT_NEW) })
+                }
+                composable(Routes.HISTORY) {
+                    HistoryScreen(
+                        onTransactionClick = { id -> navController.navigate(Routes.editExisting(id)) },
+                        onAddClick = { navController.navigate(Routes.ADD_EDIT_NEW) }
+                    )
+                }
+                composable(Routes.SETTINGS) {
+                    SettingsScreen(
+                        onLogout = {
+                            authService.signOut()
+                            navController.navigate(Routes.LOGIN) {
+                                popUpTo(Routes.DASHBOARD) { inclusive = true }
+                            }
+                        }
+                    )
+                }
+                composable(Routes.ADD_EDIT_NEW) {
+                    AddEditTransactionScreen(
+                        transactionId = null,
+                        onDone = { navController.popBackStack() },
+                        onCancel = { navController.popBackStack() }
+                    )
+                }
+                composable(
+                    route = Routes.ADD_EDIT_WITH_ID,
+                    arguments = listOf(navArgument("transactionId") { type = NavType.LongType })
+                ) { backStackEntry ->
+                    val id = backStackEntry.arguments?.getLong("transactionId")
+                    AddEditTransactionScreen(
+                        transactionId = id,
+                        onDone = { navController.popBackStack() },
+                        onCancel = { navController.popBackStack() }
+                    )
+                }
             }
         }
     }
@@ -151,3 +176,4 @@ private fun NavController.navigateSingleTopTo(route: String) =
         launchSingleTop = true
         restoreState = true
     }
+

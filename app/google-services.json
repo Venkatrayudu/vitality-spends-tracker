@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "709774162782",
+    "project_id": "vitality-spends-tracker",
+    "storage_bucket": "vitality-spends-tracker.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:709774162782:android:428629555453e1ff3dedcf",
+        "android_client_info": {
+          "package_name": "com.vmeduri.fintrack"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAitwPNEIMe7tQFDDxP-xcgBXgd9sySdLY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

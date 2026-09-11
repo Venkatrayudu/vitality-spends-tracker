@@ -36,7 +36,7 @@ import com.vmeduri.fintrack.util.CurrencyUtils
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingsScreen() {
+fun SettingsScreen(onLogout: () -> Unit = {}) {
     val viewModel: SettingsViewModel = viewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -129,6 +129,15 @@ fun SettingsScreen() {
                 OutlinedButton(onClick = { viewModel.setReminderHour((uiState.reminderHour + 1).mod(24)) }) {
                     Text("+")
                 }
+            }
+
+            HorizontalDivider()
+
+            OutlinedButton(
+                onClick = onLogout,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Sign Out")
             }
         }
     }
