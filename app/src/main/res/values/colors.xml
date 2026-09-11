@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="brand_primary">#00643C</color>
+    <color name="brand_primary_dark">#004226</color>
+    <color name="brand_secondary">#7ED957</color>
+    <color name="warning">#E5A400</color>
+    <color name="danger">#C43D3D</color>
+    <color name="surface_light">#F5F7F5</color>
+    <color name="surface_dark">#121412</color>
+
+    <color name="widget_background">#FFFFFF</color>
+    <color name="widget_background_dark">#1B1D1B</color>
+</resources>

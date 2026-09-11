@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Spend Tracker</string>
+    <string name="widget_label">Spend Tracker</string>
+
+    <string name="nav_dashboard">Dashboard</string>
+    <string name="nav_history">History</string>
+    <string name="nav_settings">Settings</string>
+
+    <string name="add_transaction">Add spend</string>
+    <string name="edit_transaction">Edit spend</string>
+
+    <string name="reminder_channel_name">Spend goal reminders</string>
+    <string name="reminder_channel_description">Friday and month-end reminders when a spend goal has not been reached yet</string>
+</resources>
